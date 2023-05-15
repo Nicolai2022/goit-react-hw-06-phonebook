@@ -8,7 +8,7 @@ const persistConfig = {
 };
 
 const directory = [
-    { id: 'id-1', name: 'Rosie Simpson', number: '444-33-55' },
+  { id: 'id-1', name: 'Rosie Simpson', number: '444-33-55' },
     { id: 'id-2', name: 'Hermione Kline', number: '777-88-22' },
     { id: 'id-3', name: 'Eden Clements', number: '888-17-44' },
     { id: 'id-4', name: 'Ann Klodme', number: '123-45-67' },
@@ -17,23 +17,31 @@ const directory = [
 
 const ContactSlice = createSlice({
   name: 'contacts',
+
   initialState: {
     directory,
   },
+
   reducers: {
-    addContact: (state, { payload }) => {
-      state.directory.push(payload);
+    addContact: {
+      reducer: (state, action) => {
+        state.directory.push(action.payload);
+      },
+      prepare: payload => ({ payload }),
     },
 
-    removeContact: (state, { payload }) => {
-      state.directory = state.directory.filter(
-        contact => contact.id !== payload
-      );
+    removeContact: {
+      reducer: (state, action) => {
+        state.directory = state.directory.filter(
+          contact => contact.id !== action.payload
+        );
+      },
+      prepare: payload => ({ payload }),
     },
   },
 });
 
-export const persistedReducer = persistReducer(
+export const contactsReducer = persistReducer(
   persistConfig,
   ContactSlice.reducer
 );
